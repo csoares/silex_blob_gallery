@@ -1,5 +1,5 @@
 #!/bin/bash
-#!/bin/bash
+
 echo -n MySQL Username:
 read username
 echo -n MySQL Password:
@@ -11,7 +11,6 @@ echo
 mysql -u$username  -p$password < db.sql 2>/dev/null
 
 composer install
-composer update
 
 
 CURRENT=`pwd`
@@ -20,8 +19,8 @@ BASENAME=`basename "$CURRENT"`
 URL=$(echo "$BASENAME" | tr '[:upper:]' '[:lower:]')
 
 count=$(grep $BASENAME /etc/apache2/sites-available/default.conf | wc -l)
-echo $count
-echo $URL
+#echo $count
+#echo $URL
 if [ $count -gt 0 ]
 then
     echo already exists
