@@ -1,0 +1,10 @@
+{
+    "name": "vagrant/firstExample",
+    "require": {
+        "silex/silex": "*",
+        "twig/twig": "1.*"
+    },
+    "require-dev": {
+        "knplabs/gaufrette": "*"
+    }
+}
