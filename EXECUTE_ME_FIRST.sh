@@ -9,7 +9,10 @@ stty echo
 # Run Command
 echo
 mysql -u$username  -p$password < db.sql 2>/dev/null
+
 composer install
+composer update
+
 
 CURRENT=`pwd`
 BASENAME=`basename "$CURRENT"`
@@ -29,7 +32,7 @@ else
     ServerName $URL.dev
 </VirtualHost>
 EOF
-    sudo apache2ctl graceful
-    sudo service apache2 stop
-    sudo service apache2 start
+    sudo apache2ctl graceful 2>/dev/null
+    sudo service apache2 stop 2>/dev/null
+    sudo service apache2 start 2>/dev/null
 fi
