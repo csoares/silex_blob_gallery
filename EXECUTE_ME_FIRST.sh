@@ -19,8 +19,7 @@ BASENAME=`basename "$CURRENT"`
 URL=$(echo "$BASENAME" | tr '[:upper:]' '[:lower:]')
 
 count=$(grep $BASENAME /etc/apache2/sites-available/default.conf | wc -l)
-#echo $count
-#echo $URL
+
 if [ $count -gt 0 ]
 then
     echo already exists
