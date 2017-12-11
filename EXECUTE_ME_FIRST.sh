@@ -28,7 +28,7 @@ else
     cat << EOF | sudo tee -a /etc/apache2/sites-available/default.conf
 <VirtualHost *:80>
     DocumentRoot /var/www/app/$BASENAME/public
-    ServerName $URL.dev
+    ServerName $URL.test
 </VirtualHost>
 EOF
     sudo apache2ctl graceful 2>/dev/null
