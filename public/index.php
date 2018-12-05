@@ -9,7 +9,7 @@ $app = new Silex\Application();
 // connect to mysql atabase
 $dsn = 'mysql:dbname=pictureExample;host=127.0.0.1;charset=utf8';
 try {
-    $dbh = new PDO($dsn, 'root', 'root');
+    $dbh = new PDO($dsn, 'root', '12345678');
 } catch (PDOException $e) {
     die('Connection failed: ');
 }
@@ -34,7 +34,7 @@ $app->post('/send', function( Request $request ) use ( $app, $dbh ) {
     if ( !empty($image) && $image->isValid() )
     {
         $data = file_get_contents($image);
-    
+        
         $sql="INSERT INTO ae_gallery SET data=?";
         $sth=$dbh->prepare($sql);
         $sth->execute(array($data));
