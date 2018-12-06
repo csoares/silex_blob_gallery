@@ -2,6 +2,7 @@
     "name": "vagrant/gallery",
     "require": {
         "silex/silex": "*",
-        "twig/twig": "1.*"
+        "twig/twig": "1.*",
+        "doctrine/dbal": "~2.2"
     }
 }
