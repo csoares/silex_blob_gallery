@@ -1,62 +1,66 @@
 <?php
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__ . '/../vendor/autoload.php';
 $app = new Silex\Application();
 
 // connect to mysql atabase
+/*
 $dsn = 'mysql:dbname=pictureExample;host=127.0.0.1;charset=utf8';
 try {
-    $dbh = new PDO($dsn, 'root', '12345678');
+$dbh = new PDO($dsn, 'root', '12345678');
 } catch (PDOException $e) {
-    die('Connection failed: ');
+die('Connection failed: ');
 }
+ */
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver' => 'pdo_mysql',
+        'host' => '127.0.0.1',
+        'dbname' => 'pictureExample',
+        'user' => 'root',
+        'password' => '12345678',
+        'charset' => 'utf8',
+    ),
+));
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../views',
 ));
 
-$app->get( '/', function() use ( $app ) {
+$app->get('/', function () use ($app) {
     return $app['twig']->render('layout.html.twig');
 });
 
-
-$app->get('/upload', function() use ( $app ) {
+$app->get('/upload', function () use ($app) {
     return $app['twig']->render('upload_form.html.twig');
 })
-->bind('upload_form');
+    ->bind('upload_form');
 
-$app->post('/send', function( Request $request ) use ( $app, $dbh ) {
+$app->post('/send', function (Request $request) use ($app) {
     $file_bag = $request->files;
     $image = $file_bag->get('image');
-    if ( !empty($image) && $image->isValid() )
-    {
+    if (!empty($image) && $image->isValid()) {
         $data = file_get_contents($image);
-        
-        $sql="INSERT INTO ae_gallery SET data=?";
-        $sth=$dbh->prepare($sql);
-        $sth->execute(array($data));
-    
-    }    
-    
+       
+        $app['db']->insert('ae_gallery', array('data'=>$data));
+
+    }
+
     return new RedirectResponse($app['url_generator']->generate('gallery'));
 })
-->bind('upload_post');
+    ->bind('upload_post');
 
-$app->get('/view', function() use ( $app , $dbh) {
-    $sql="SELECT TO_BASE64(data) as data FROM ae_gallery";
-    $sth=$dbh->prepare($sql);
-    $sth->execute();
-    $images=$sth->fetchAll(PDO::FETCH_ASSOC);
-    
+$app->get('/view', function () use ($app) {
    
-    return $app['twig']->render('gallery.html.twig',array(
-        'images' => $images,
-    ));
-})
-->bind('gallery');
+    $sql = "SELECT TO_BASE64(data) as data, id, image_time FROM ae_gallery";
+    $images = $app['db']->fetchAll($sql, array());
 
-$app['debug'] = true; 
+    return $app['twig']->render('gallery.html.twig', array('images' => $images));
+})
+    ->bind('gallery');
+
+$app['debug'] = true;
 $app->run();

@@ -2,19 +2,21 @@
 {# reuse the title - defined and redefined the title  #}
 {% block title 'Image Gallery' %}
 
-{# redefine the class of a block - review the default layout  #}
-{% block uploadMenu 'class="nav-item"' %}
-{% block galleryMenu %}class="nav-item active"{% endblock %}
+    {# redefine the class of a block - review the default layout  #}
+    {% block uploadMenu 'class="nav-item"' %}
+        {% block galleryMenu %}class="nav-item active"{% endblock %}
 
-{% block body %}
-    <h2>Image Gallery</h2>
-    <hr>
-    {% for item in images %}
-        <img src="data:image/jpg;base64,{{ item['data'] }}" class="img-thumbnail" width="200" height="200">
-    {% else %}
-        <p><strong>Sorry, no images were found.</strong></p>
-    {% endfor %}
-    <br><br>
-    <hr>
-    <a href="{{ app.url_generator.generate('upload_form') }}" class="btn btn-primary">Upload some images &raquo;</a>
-{% endblock %}
+        {% block body %}
+            <h2>Image Gallery</h2>
+            <hr>
+            {% for item in images %}
+                <img src="data:image/jpg;base64,{{ item.data }}" class="img-thumbnail" width="200" height="200">
+            {% else %}
+                <p>
+                    <strong>Sorry, no images were found.</strong>
+                </p>
+            {% endfor %}
+            <br><br>
+            <hr>
+            <a href="{{ app.url_generator.generate('upload_form') }}" class="btn btn-primary">Upload some images &raquo;</a>
+        {% endblock %}
